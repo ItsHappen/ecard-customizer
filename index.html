@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>It's Happen - E-Card Customizer Test</title>
+  <script src="https://jscolor.com/releases/2.4.5/jscolor.js"></script>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -84,7 +85,7 @@
     <input type="file" accept="image/*" onchange="uploadPhoto(event)">
   </label>
   <label>🎨 Pick a Color:
-    <input type="color" id="colorPicker" onchange="changeColor(event)">
+    <input class="jscolor" id="colorPicker" onchange="changeColor(event)">
   </label>
   <label>💬 Enter Message:
     <input type="text" id="textInput" placeholder="Write your message" oninput="changeText(event)">
@@ -113,8 +114,8 @@
     }
 
     function changeColor(event) {
-      document.getElementById('ecard-color-mask').style.backgroundColor = event.target.value;
-    }
+  document.getElementById('ecard-color-mask').style.backgroundColor = '#' + event.target.value;
+}
 
     function changeText(event) {
       document.getElementById('ecard-text').innerText = event.target.value;
