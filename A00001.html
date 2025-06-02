@@ -1,147 +1,118 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>It's Happen - E-Card A00001</title>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <meta charset="UTF-8">
+  <title>ItsHappen E-Card Customizer</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f9f4f0;
-      padding: 2rem;
+      font-family: Arial, sans-serif;
+      background: #f7f0e8;
+      text-align: center;
+      padding: 20px;
+    }
+    .ecard {
+      width: 300px;
+      height: 500px;
+      margin: auto;
+      background: #ffffff;
+      border: 2px dashed #ccc;
       display: flex;
       flex-direction: column;
+      justify-content: center;
       align-items: center;
-    }
-    #ecard-preview {
       position: relative;
-      width: 400px;
-      height: 600px;
-      background: #fff;
-      border: 1px solid #ddd;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-      margin-bottom: 2rem;
-      overflow: hidden;
     }
-    #ecard-photo {
-      position: absolute;
-      top: 50px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 300px;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 8px;
+    .ecard img {
+      max-width: 100%;
+      max-height: 50%;
     }
-    #ecard-text {
-      position: absolute;
-      bottom: 100px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%;
-      text-align: center;
-      font-size: 1.4rem;
-      color: #444;
-      white-space: pre-wrap;
+    .ecard-text {
+      margin-top: 20px;
+      font-size: 20px;
     }
-    #ecard-color-mask {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100px;
-      background-color: #fbd6ff;
+    .form-group {
+      margin: 10px 0;
     }
-    label, input {
-      display: block;
-      margin: 0.5rem 0;
-    }
-    input[type="text"] {
-      width: 300px;
-      padding: 0.5rem;
-    }
-    .add-to-cart-button {
-      margin-top: 1rem;
-      background-color: #333;
-      color: #fff;
-      padding: 0.75rem 1.5rem;
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #333;
+      color: white;
       border: none;
-      border-radius: 4px;
-      font-size: 1rem;
       cursor: pointer;
+    }
+    input[type="color"] {
+      height: 40px;
+      width: 60px;
+      border: none;
     }
   </style>
 </head>
 <body>
-
-  <h2>🎂 Customize Your A00001 E-Card</h2>
-
-  <div id="ecard-preview">
-    <div id="ecard-color-mask"></div>
-    <img id="ecard-photo" src="" alt="Your photo will show here">
-    <div id="ecard-text">Type your message here</div>
+  <h1>Customize Your E-Card</h1>
+  <div class="ecard" id="ecard">
+    <img id="ecardImage" src="https://via.placeholder.com/300x250.png?text=Your+Photo" alt="Card Image">
+    <div class="ecard-text" id="ecardText">Your Message Here</div>
   </div>
-
-  <label>📷 Upload Photo:
-    <input type="file" accept="image/*" onchange="uploadPhoto(event)">
-  </label>
-
-  <label>🎨 Pick a Color:
-    <input type="color" id="colorPicker" onchange="changeColor(event)">
-  </label>
-
-  <label>💬 Enter Message:
-    <input type="text" id="textInput" placeholder="Write your message" oninput="changeText(event)">
-  </label>
-
-  <button class="add-to-cart-button" onclick="uploadToCloudinaryAndRedirect()">Add to Cart</button>
+  <div class="form-group">
+    <label>Enter your message:</label><br>
+    <input type="text" id="messageInput" placeholder="Type your message">
+  </div>
+  <div class="form-group">
+    <label>Choose a photo (URL):</label><br>
+    <input type="text" id="photoURL" placeholder="Paste image URL">
+  </div>
+  <div class="form-group">
+    <label>Pick a Color:</label><br>
+    <input type="color" id="colorPicker">
+  </div>
+  <button onclick="uploadToCloudinary()">Add to Cart</button>
 
   <script>
-    let uploadedImageURL = "";
+    const ecard = document.getElementById('ecard');
+    const ecardImage = document.getElementById('ecardImage');
+    const ecardText = document.getElementById('ecardText');
+    const messageInput = document.getElementById('messageInput');
+    const photoURL = document.getElementById('photoURL');
+    const colorPicker = document.getElementById('colorPicker');
 
-    function uploadPhoto(event) {
-      const reader = new FileReader();
-      reader.onload = function () {
-        uploadedImageURL = reader.result;
-        document.getElementById("ecard-photo").src = uploadedImageURL;
-      };
-      reader.readAsDataURL(event.target.files[0]);
-    }
+    messageInput.addEventListener('input', () => {
+      ecardText.textContent = messageInput.value;
+    });
 
-    function changeColor(event) {
-      document.getElementById("ecard-color-mask").style.backgroundColor = event.target.value;
-    }
+    photoURL.addEventListener('input', () => {
+      ecardImage.src = photoURL.value;
+    });
 
-    function changeText(event) {
-      document.getElementById("ecard-text").innerText = event.target.value;
-    }
+    colorPicker.addEventListener('input', () => {
+      ecard.style.backgroundColor = colorPicker.value;
+    });
 
-    function uploadToCloudinaryAndRedirect() {
-      html2canvas(document.getElementById("ecard-preview")).then(canvas => {
+    function uploadToCloudinary() {
+      html2canvas(ecard).then(canvas => {
         canvas.toBlob(blob => {
           const formData = new FormData();
-          formData.append("file", blob);
-          formData.append("upload_preset", "its_happen_unsigned"); // Replace with your Cloudinary unsigned preset
+          formData.append('file', blob);
+          formData.append('upload_preset', 'its_happen_unsigned');
 
-          fetch("https://api.cloudinary.com/v1_1/dvfdtjhpq/image/upload", {
-            method: "POST",
+          fetch('https://api.cloudinary.com/v1_1/dvfdtjhpg/image/upload', {
+            method: 'POST',
             body: formData
           })
           .then(response => response.json())
           .then(data => {
-            const imageUrl = data.secure_url;
-            const redirectUrl = `https://itshappen.us/cart/add?id=8556950028457&quantity=1&properties[Message]=${encodeURIComponent(document.getElementById("textInput").value)}&properties[Color]=${encodeURIComponent(document.getElementById("colorPicker").value)}&properties[ImageURL]=${encodeURIComponent(imageUrl)}`;
-            window.location.href = redirectUrl;
+            alert("Upload Success! File URL: " + data.secure_url);
+            // Optional: Redirect or save URL for later
           })
-          .catch(error => {
-            alert("Upload failed. Try again.");
-            console.error("Upload error:", error);
+          .catch(err => {
+            alert("Upload Failed: " + err.message);
           });
         });
       });
     }
   </script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </body>
 </html>
