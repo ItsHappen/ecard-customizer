@@ -66,4 +66,39 @@
         formData.append("upload_preset", "its_happen_unsigned");
 
         const cloudName = "dvfdtjhpg";
-        const url = `htt
+        const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+
+        try {
+          const response = await fetch(url, {
+            method: "POST",
+            body: formData
+          });
+
+          const data = await response.json();
+          if (data.secure_url) {
+            alert("Your card was uploaded! Now sending to checkout...");
+
+            // Get variant ID from URL
+            const params = new URLSearchParams(window.location.search);
+            const variantId = params.get('variant');
+
+            if (!variantId) {
+              alert("Variant ID is missing. Please contact support.");
+              return;
+            }
+
+            const shopifyCartURL = `https://itshappen.us/cart/add?id=${variantId}&quantity=1&properties[Note]=Personalization complete. Please pay to receive your card!`;
+            window.location.href = shopifyCartURL;
+
+          } else {
+            alert("Upload failed.");
+          }
+        } catch (err) {
+          console.error(err);
+          alert("Upload error.");
+        }
+      }, "image/png");
+    });
+  </script>
+</body>
+</html>
