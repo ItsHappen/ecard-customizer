@@ -104,6 +104,17 @@
 
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script>
+    const params = new URLSearchParams(window.location.search);
+const productHandle = params.get("product");
+
+// Load the correct template
+if (productHandle === "happy-birthday-e-card") {
+  loadHappyBirthdayTemplate();
+} else if (productHandle === "thank-you-card") {
+  loadThankYouTemplate();
+} else {
+  showError("This card template is not available.");
+}
     document.addEventListener("DOMContentLoaded", function () {
       let uploadedImageURL = "";
 
