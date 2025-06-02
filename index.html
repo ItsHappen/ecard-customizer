@@ -3,8 +3,12 @@
   const sku = params.get("sku");
 
   if (sku) {
-    // Redirect to corresponding HTML file
-    window.location.href = `${sku}.html`;
+  const variant = params.get("variant");
+  let targetURL = `${sku}.html`;
+  if (variant) {
+    targetURL += `?variant=${variant}`;
+  }
+  window.location.href = targetURL;
   } else {
     document.body.innerHTML = "<h1>SKU not found</h1>";
   }
