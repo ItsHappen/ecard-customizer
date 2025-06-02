@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -123,9 +122,9 @@
         canvas.toBlob(blob => {
           const formData = new FormData();
           formData.append("file", blob);
-          formData.append("upload_preset", "YOUR_UPLOAD_PRESET"); // Replace with your Cloudinary unsigned preset
+          formData.append("upload_preset", "its_happen_unsigned"); // Replace with your Cloudinary unsigned preset
 
-          fetch("https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload", {
+          fetch("https://api.cloudinary.com/v1_1/dvfdtjhpq/image/upload", {
             method: "POST",
             body: formData
           })
