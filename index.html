@@ -4,6 +4,52 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>It's Happen - E-Card Customizer Test</title>
+
+   <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    let uploadedImageURL = "";
+
+    function uploadPhoto(event) {
+      const reader = new FileReader();
+      reader.onload = function () {
+        uploadedImageURL = reader.result;
+        document.getElementById("ecard-photo").src = uploadedImageURL;
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+
+    function changeColor(event) {
+      document.getElementById("ecard-color-mask").style.backgroundColor = event.target.value;
+    }
+
+    function changeText(event) {
+      document.getElementById("ecard-text").innerText = event.target.value;
+    }
+
+    function prepareOrder() {
+      document.getElementById("hiddenMessage").value = document.getElementById("textInput").value;
+      document.getElementById("hiddenColor").value = document.getElementById("colorPicker").value;
+      document.getElementById("hiddenPhoto").value = uploadedImageURL;
+    }
+
+    function downloadCard() {
+      html2canvas(document.getElementById("ecard-preview")).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "my-custom-ecard.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+    }
+
+    // Attach functions globally
+    window.uploadPhoto = uploadPhoto;
+    window.changeColor = changeColor;
+    window.changeText = changeText;
+    window.prepareOrder = prepareOrder;
+    window.downloadCard = downloadCard;
+  });
+</script>
+  
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -100,51 +146,5 @@
 
   <button class="download-button" onclick="downloadCard()">Download My E-Card</button>
 
- <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    let uploadedImageURL = "";
-
-    function uploadPhoto(event) {
-      const reader = new FileReader();
-      reader.onload = function () {
-        uploadedImageURL = reader.result;
-        document.getElementById("ecard-photo").src = uploadedImageURL;
-      };
-      reader.readAsDataURL(event.target.files[0]);
-    }
-
-    function changeColor(event) {
-      document.getElementById("ecard-color-mask").style.backgroundColor = event.target.value;
-    }
-
-    function changeText(event) {
-      document.getElementById("ecard-text").innerText = event.target.value;
-    }
-
-    function prepareOrder() {
-      document.getElementById("hiddenMessage").value = document.getElementById("textInput").value;
-      document.getElementById("hiddenColor").value = document.getElementById("colorPicker").value;
-      document.getElementById("hiddenPhoto").value = uploadedImageURL;
-    }
-
-    function downloadCard() {
-      html2canvas(document.getElementById("ecard-preview")).then(canvas => {
-        const link = document.createElement("a");
-        link.download = "my-custom-ecard.png";
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-      });
-    }
-
-    // Attach functions globally
-    window.uploadPhoto = uploadPhoto;
-    window.changeColor = changeColor;
-    window.changeText = changeText;
-    window.prepareOrder = prepareOrder;
-    window.downloadCard = downloadCard;
-  });
-</script>
-
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </body>
 </html>
