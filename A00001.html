@@ -87,7 +87,7 @@
               return;
             }
 
-            const shopifyCartURL = `https://itshappen.us/cart/add?id=${variantId}&quantity=1&properties[Note]=Personalization complete. Please pay to receive your card!`;
+            const shopifyCartURL = `https://itshappen.us/cart/${variantId}:1`;
             window.location.href = shopifyCartURL;
 
           } else {
