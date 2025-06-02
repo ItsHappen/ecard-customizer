@@ -87,7 +87,7 @@
               return;
             }
 
-            const shopifyCartURL = `https://itshappen.us/cart/${variantId}:1?properties[CloudinaryURL]=${encodeURIComponent(data.secure_url)}`;
+            const shopifyCartURL = `https://itshappen.us/cart/${variantId}:1?note=${encodeURIComponent("Cloudinary: " + data.secure_url)}`;
             window.location.href = shopifyCartURL;
 
           } else {
