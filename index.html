@@ -84,4 +84,58 @@
     <input type="file" accept="image/*" onchange="uploadPhoto(event)">
   </label>
   <label>🎨 Pick a Color:
-    <
+    <input type="color" id="colorPicker" onchange="changeColor(event)">
+  </label>
+  <label>💬 Enter Message:
+    <input type="text" id="textInput" placeholder="Write your message" oninput="changeText(event)">
+  </label>
+
+  <form action="https://itshappen.us/cart/add" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="46542627729710">
+    <input type="hidden" name="properties[Message]" id="hiddenMessage">
+    <input type="hidden" name="properties[Color]" id="hiddenColor">
+    <input type="hidden" name="properties[Photo]" id="hiddenPhoto">
+    <button type="submit" class="buy-button" onclick="prepareOrder()">Buy This Custom Card</button>
+  </form>
+
+  <button class="download-button" onclick="downloadCard()">Download My E-Card</button>
+
+  <script>
+    let uploadedImageURL = "";
+
+    function uploadPhoto(event) {
+      const reader = new FileReader();
+      reader.onload = function() {
+        uploadedImageURL = reader.result;
+        document.getElementById('ecard-photo').src = uploadedImageURL;
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+
+    function changeColor(event) {
+      document.getElementById('ecard-color-mask').style.backgroundColor = event.target.value;
+    }
+
+    function changeText(event) {
+      document.getElementById('ecard-text').innerText = event.target.value;
+    }
+
+    function prepareOrder() {
+      document.getElementById('hiddenMessage').value = document.getElementById('textInput').value;
+      document.getElementById('hiddenColor').value = document.getElementById('colorPicker').value;
+      document.getElementById('hiddenPhoto').value = uploadedImageURL;
+    }
+
+    function downloadCard() {
+      html2canvas(document.getElementById("ecard-preview")).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "my-custom-ecard.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</body>
+</html>
