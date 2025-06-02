@@ -32,16 +32,11 @@
     let uploadedImage = null;
 
     function drawCard() {
-      // Background
       ctx.fillStyle = bgColorInput.value;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // Image
       if (uploadedImage) {
         ctx.drawImage(uploadedImage, 100, 100, 200, 200);
       }
-
-      // Message
       ctx.fillStyle = "#fff";
       ctx.font = "bold 24px sans-serif";
       ctx.textAlign = "center";
@@ -54,7 +49,6 @@
     photoInput.addEventListener("change", (e) => {
       const file = e.target.files[0];
       if (!file) return;
-
       const reader = new FileReader();
       reader.onload = function(evt) {
         uploadedImage = new Image();
@@ -67,7 +61,6 @@
     drawCard();
 
     document.getElementById("addToCartBtn").addEventListener("click", async () => {
-      // Convert canvas to blob
       canvas.toBlob(async function(blob) {
         const formData = new FormData();
         formData.append("file", blob, "ecard.png");
@@ -84,8 +77,11 @@
 
           const data = await response.json();
           if (data.secure_url) {
-            alert("Your card was uploaded! URL: " + data.secure_url);
-            // Here you could redirect or store the image URL
+            alert("Your card was uploaded! Now sending to checkout...");
+
+            // Redirect to Shopify cart
+            const shopifyCartURL = "https://itshappen.us/cart/add?id=46542627729710&quantity=1&properties[Note]=Personalization complete. Please pay to receive your card!";
+            window.location.href = shopifyCartURL;
           } else {
             alert("Upload failed.");
           }
