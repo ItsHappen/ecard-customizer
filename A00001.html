@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,32 +66,4 @@
         formData.append("upload_preset", "its_happen_unsigned");
 
         const cloudName = "dvfdtjhpg";
-        const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
-
-        try {
-          const response = await fetch(url, {
-            method: "POST",
-            body: formData
-          });
-
-          const data = await response.json();
-          if (data.secure_url) {
-            alert("Your card was uploaded! Now sending to checkout...");
-
-            // Redirect to Shopify cart
-            const variantId = '45887411060905'; // Replace with your actual Variant ID
-            const shopifyCartURL = `https://itshappen.us/cart/add?id=${variantId}&quantity=1&properties[Note]=Personalization complete. Please pay to receive your card!`;
-            window.location.href = shopifyCartURL;
-            
-          } else {
-            alert("Upload failed.");
-          }
-        } catch (err) {
-          console.error(err);
-          alert("Upload error.");
-        }
-      }, "image/png");
-    });
-  </script>
-</body>
-</html>
+        const url = `htt
