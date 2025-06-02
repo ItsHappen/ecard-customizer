@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>It's Happen - E-Card Customizer Test</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9f4f0;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #ecard-preview {
+      position: relative;
+      width: 400px;
+      height: 600px;
+      background: #fff;
+      border: 1px solid #ddd;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+    #ecard-photo {
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    #ecard-text {
+      position: absolute;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      text-align: center;
+      font-size: 1.4rem;
+      color: #444;
+      white-space: pre-wrap;
+    }
+    #ecard-color-mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100px;
+      background-color: #fbd6ff;
+    }
+    label, input {
+      display: block;
+      margin: 0.5rem 0;
+    }
+    input[type="text"] {
+      width: 300px;
+      padding: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <h2>🧁 E-Card Customizer Test</h2>
+  <div id="ecard-preview">
+    <div id="ecard-color-mask"></div>
+    <img id="ecard-photo" src="" alt="Your photo will show here">
+    <div id="ecard-text">Type your message here</div>
+  </div>
+
+  <label>📷 Upload Photo:
+    <input type="file" accept="image/*" onchange="uploadPhoto(event)">
+  </label>
+  <label>🎨 Pick a Color:
+    <input type="color" onchange="changeColor(event)">
+  </label>
+  <label>💬 Enter Message:
+    <input type="text" placeholder="Write your message" oninput="changeText(event)">
+  </label>
+
+  <script>
+    function uploadPhoto(event) {
+      const reader = new FileReader();
+      reader.onload = function() {
+        document.getElementById('ecard-photo').src = reader.result;
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+
+    function changeColor(event) {
+      document.getElementById('ecard-color-mask').style.backgroundColor = event.target.value;
+    }
+
+    function changeText(event) {
+      document.getElementById('ecard-text').innerText = event.target.value;
+    }
+  </script>
+</body>
+</html>
