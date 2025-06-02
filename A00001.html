@@ -2,117 +2,99 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>ItsHappen E-Card Customizer</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Custom E-Card</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f7f0e8;
-      text-align: center;
-      padding: 20px;
-    }
-    .ecard {
-      width: 300px;
-      height: 500px;
-      margin: auto;
-      background: #ffffff;
-      border: 2px dashed #ccc;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-    }
-    .ecard img {
-      max-width: 100%;
-      max-height: 50%;
-    }
-    .ecard-text {
-      margin-top: 20px;
-      font-size: 20px;
-    }
-    .form-group {
-      margin: 10px 0;
-    }
-    button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 16px;
-      background: #333;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    input[type="color"] {
-      height: 40px;
-      width: 60px;
-      border: none;
-    }
+    body { font-family: sans-serif; text-align: center; padding: 20px; background-color: #fdf6f0; }
+    canvas { border: 1px solid #ccc; margin-top: 20px; }
+    input, button { margin: 10px; padding: 8px; }
+    #ecard-area { position: relative; display: inline-block; }
   </style>
 </head>
 <body>
-  <h1>Customize Your E-Card</h1>
-  <div class="ecard" id="ecard">
-    <img id="ecardImage" src="https://via.placeholder.com/300x250.png?text=Your+Photo" alt="Card Image">
-    <div class="ecard-text" id="ecardText">Your Message Here</div>
+  <h2>Customize Your E-Card</h2>
+  <input type="color" id="bgColor" value="#00bcd4" />
+  <input type="text" id="customMessage" placeholder="Enter your message" />
+  <input type="file" id="photoInput" accept="image/*" />
+  <div id="ecard-area">
+    <canvas id="ecardCanvas" width="400" height="600"></canvas>
   </div>
-  <div class="form-group">
-    <label>Enter your message:</label><br>
-    <input type="text" id="messageInput" placeholder="Type your message">
-  </div>
-  <div class="form-group">
-    <label>Choose a photo (URL):</label><br>
-    <input type="text" id="photoURL" placeholder="Paste image URL">
-  </div>
-  <div class="form-group">
-    <label>Pick a Color:</label><br>
-    <input type="color" id="colorPicker">
-  </div>
-  <button onclick="uploadToCloudinary()">Add to Cart</button>
+  <button id="addToCartBtn">Add to Cart</button>
 
   <script>
-    const ecard = document.getElementById('ecard');
-    const ecardImage = document.getElementById('ecardImage');
-    const ecardText = document.getElementById('ecardText');
-    const messageInput = document.getElementById('messageInput');
-    const photoURL = document.getElementById('photoURL');
-    const colorPicker = document.getElementById('colorPicker');
+    const canvas = document.getElementById("ecardCanvas");
+    const ctx = canvas.getContext("2d");
+    const messageInput = document.getElementById("customMessage");
+    const bgColorInput = document.getElementById("bgColor");
+    const photoInput = document.getElementById("photoInput");
 
-    messageInput.addEventListener('input', () => {
-      ecardText.textContent = messageInput.value;
-    });
+    let uploadedImage = null;
 
-    photoURL.addEventListener('input', () => {
-      ecardImage.src = photoURL.value;
-    });
+    function drawCard() {
+      // Background
+      ctx.fillStyle = bgColorInput.value;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    colorPicker.addEventListener('input', () => {
-      ecard.style.backgroundColor = colorPicker.value;
-    });
+      // Image
+      if (uploadedImage) {
+        ctx.drawImage(uploadedImage, 100, 100, 200, 200);
+      }
 
-    function uploadToCloudinary() {
-      html2canvas(ecard).then(canvas => {
-        canvas.toBlob(blob => {
-          const formData = new FormData();
-          formData.append('file', blob);
-          formData.append('upload_preset', 'its_happen_unsigned');
-
-          fetch('https://api.cloudinary.com/v1_1/dvfdtjhpg/image/upload', {
-            method: 'POST',
-            body: formData
-          })
-          .then(response => response.json())
-          .then(data => {
-            alert("Upload Success! File URL: " + data.secure_url);
-            // Optional: Redirect or save URL for later
-          })
-          .catch(err => {
-            alert("Upload Failed: " + err.message);
-          });
-        });
-      });
+      // Message
+      ctx.fillStyle = "#fff";
+      ctx.font = "bold 24px sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText(messageInput.value || "Happy Birthday!", canvas.width / 2, 350);
     }
+
+    bgColorInput.addEventListener("input", drawCard);
+    messageInput.addEventListener("input", drawCard);
+
+    photoInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        uploadedImage = new Image();
+        uploadedImage.onload = drawCard;
+        uploadedImage.src = evt.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    drawCard();
+
+    document.getElementById("addToCartBtn").addEventListener("click", async () => {
+      // Convert canvas to blob
+      canvas.toBlob(async function(blob) {
+        const formData = new FormData();
+        formData.append("file", blob, "ecard.png");
+        formData.append("upload_preset", "its_happen_unsigned");
+
+        const cloudName = "dvfdtjhpg";
+        const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
+
+        try {
+          const response = await fetch(url, {
+            method: "POST",
+            body: formData
+          });
+
+          const data = await response.json();
+          if (data.secure_url) {
+            alert("Your card was uploaded! URL: " + data.secure_url);
+            // Here you could redirect or store the image URL
+          } else {
+            alert("Upload failed.");
+          }
+        } catch (err) {
+          console.error(err);
+          alert("Upload error.");
+        }
+      }, "image/png");
+    });
   </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </body>
 </html>
