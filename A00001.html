@@ -3,23 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Custom E-Card</title>
+  <title>Customize E-Card – A00001</title>
   <style>
-    body { font-family: sans-serif; text-align: center; padding: 20px; background-color: #fdf6f0; }
-    canvas { border: 1px solid #ccc; margin-top: 20px; }
-    input, button { margin: 10px; padding: 8px; }
-    #ecard-area { position: relative; display: inline-block; }
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 2rem;
+      background-color: #fdf6f0;
+    }
+    canvas {
+      border: 1px solid #ccc;
+      margin-top: 20px;
+    }
+    input, button {
+      margin: 10px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    #ecard-area {
+      position: relative;
+      display: inline-block;
+    }
   </style>
 </head>
 <body>
-  <h2>Customize Your E-Card</h2>
+  <h2>🎨 Customize Your Happy Birthday E-Card</h2>
   <input type="color" id="bgColor" value="#00bcd4" />
   <input type="text" id="customMessage" placeholder="Enter your message" />
   <input type="file" id="photoInput" accept="image/*" />
+  <br/>
+  <button id="createCardBtn">Upload & Pay</button>
+
   <div id="ecard-area">
     <canvas id="ecardCanvas" width="400" height="600"></canvas>
   </div>
-  <button onclick="location.href='https://buy.stripe.com/fZufZhcsph1ld3rccg0kE00'">Buy Now</button>
 
   <script>
     const canvas = document.getElementById("ecardCanvas");
@@ -27,16 +44,19 @@
     const messageInput = document.getElementById("customMessage");
     const bgColorInput = document.getElementById("bgColor");
     const photoInput = document.getElementById("photoInput");
+    const createCardBtn = document.getElementById("createCardBtn");
 
     let uploadedImage = null;
 
     function drawCard() {
       ctx.fillStyle = bgColorInput.value;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+
       if (uploadedImage) {
         ctx.drawImage(uploadedImage, 100, 100, 200, 200);
       }
-      ctx.fillStyle = "#fff";
+
+      ctx.fillStyle = "#ffffff";
       ctx.font = "bold 24px sans-serif";
       ctx.textAlign = "center";
       ctx.fillText(messageInput.value || "Happy Birthday!", canvas.width / 2, 350);
@@ -59,7 +79,7 @@
 
     drawCard();
 
-    document.getElementById("addToCartBtn").addEventListener("click", async () => {
+    createCardBtn.addEventListener("click", async () => {
       canvas.toBlob(async function(blob) {
         const formData = new FormData();
         formData.append("file", blob, "ecard.png");
@@ -75,27 +95,19 @@
           });
 
           const data = await response.json();
+
           if (data.secure_url) {
-            alert("Your card was uploaded! Now sending to checkout...");
+            alert("✅ Your card was uploaded! Redirecting to payment...");
 
-            // Get variant ID from URL
-            const params = new URLSearchParams(window.location.search);
-            const variantId = params.get('variant');
-
-            if (!variantId) {
-              alert("Variant ID is missing. Please contact support.");
-              return;
-            }
-
-            const shopifyCartURL = `https://itshappen.us/cart/${variantId}:1?note=${encodeURIComponent("Cloudinary: " + data.secure_url)}`;
-            window.location.href = shopifyCartURL;
+            // OPTIONAL: You can include the URL in Stripe metadata with advanced setup
+            window.location.href = "https://buy.stripe.com/fZufZhcsph1ld3rccg0kE00";
 
           } else {
-            alert("Upload failed.");
+            alert("Upload failed. Please try again.");
           }
         } catch (err) {
           console.error(err);
-          alert("Upload error.");
+          alert("Upload error. Please try again.");
         }
       }, "image/png");
     });
