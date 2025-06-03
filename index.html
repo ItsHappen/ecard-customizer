@@ -1,15 +1,67 @@
-<script>
-  const params = new URLSearchParams(window.location.search);
-  const sku = params.get("sku");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>It's Happen – Personalized Cards</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+      background: #fffaf8;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+    }
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 1rem;
+      background: #fff;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    .card img {
+      max-width: 100%;
+      border-radius: 8px;
+    }
+    .card button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .card button:hover {
+      background: #555;
+    }
+  </style>
+</head>
+<body>
 
-  if (sku) {
-  const variant = params.get("variant");
-  let targetURL = `${sku}.html`;
-  if (variant) {
-    targetURL += `?variant=${variant}`;
-  }
-  window.location.href = targetURL;
-  } else {
-    document.body.innerHTML = "<h1>SKU not found</h1>";
-  }
-</script>
+<h1>✨ It's Happen – Custom E-Cards ✨</h1>
+
+<div class="products">
+  <!-- Product Card: A00001 -->
+  <div class="card">
+    <img src="https://your-cloudinary-url.com/sample-card.jpg" alt="Birthday Card">
+    <h3>Happy Birthday E-Card</h3>
+    <p>SKU: A00001</p>
+    <button onclick="location.href='A00001.html'">Customize It</button>
+  </div>
+
+  <!-- Add more cards below -->
+</div>
+
+</body>
+</html>
