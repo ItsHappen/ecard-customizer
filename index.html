@@ -1,19 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>It's Happen – Personalized Cards</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>It's Happen – Custom E-Cards</title>
   <style>
     body {
-      font-family: sans-serif;
-      padding: 2rem;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: #fffaf8;
       color: #333;
     }
-    h1 {
-      text-align: center;
+    header {
+      background-color: #fff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: #e67e22;
+    }
+    nav a {
+      margin: 0 1rem;
+      text-decoration: none;
+      color: #555;
+    }
+    nav a:hover {
+      color: #e67e22;
+    }
+    .banner {
+      background: url('https://your-cloudinary-banner-url.jpg') no-repeat center center/cover;
+      height: 300px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
       font-size: 2rem;
+      font-weight: bold;
+    }
+    .content {
+      padding: 2rem;
     }
     .products {
       display: grid;
@@ -36,32 +67,59 @@
     .card button {
       margin-top: 1rem;
       padding: 0.5rem 1rem;
-      background: #333;
+      background: #e67e22;
       color: white;
       border: none;
       border-radius: 6px;
       cursor: pointer;
     }
     .card button:hover {
-      background: #555;
+      background: #cf711c;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #aaa;
     }
   </style>
 </head>
 <body>
 
-<h1>✨ It's Happen – Custom E-Cards ✨</h1>
+<header>
+  <h1>It's Happen</h1>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#products">Products</a>
+    <a href="#about">About Us</a>
+    <a href="#cart">Cart</a>
+  </nav>
+</header>
 
-<div class="products">
-  <!-- Product Card: A00001 -->
-  <div class="card">
-    <img src="https://your-cloudinary-url.com/sample-card.jpg" alt="Birthday Card">
-    <h3>Happy Birthday E-Card</h3>
-    <p>SKU: A00001</p>
-    <button onclick="location.href='A00001.html'">Customize It</button>
-  </div>
-
-  <!-- Add more cards below -->
+<div class="banner" id="home">
+  Make Someone's Day Special ✨
 </div>
+
+<div class="content" id="products">
+  <h2 style="text-align: center;">Our E-Cards</h2>
+  <div class="products">
+    <div class="card">
+      <img src="https://your-cloudinary-card-thumbnail.jpg" alt="Happy Birthday Card">
+      <h3>Happy Birthday E-Card</h3>
+      <p>SKU: A00001</p>
+      <button onclick="location.href='A00001.html'">Customize It</button>
+    </div>
+    <!-- Add more products here -->
+  </div>
+</div>
+
+<div class="content" id="about">
+  <h2>About Us</h2>
+  <p>It's Happen is a heartfelt digital studio where every animation is a gift. We help you create personalized, animated e-cards that make people laugh, cry, and feel truly seen. Built with love by an artist who believes joy should be instant and accessible.</p>
+</div>
+
+<footer>
+  &copy; 2025 It's Happen Studio. All rights reserved.
+</footer>
 
 </body>
 </html>
